@@ -1,0 +1,21 @@
+Server=localhost;Port=5432;Database=tickets;User Id=tickets;Password=password;
+
+dotnet ef migrations remove -- "Server=localhost;Port=5432;Database=tickets;User Id=tickets;Password=password;"
+dotnet ef migrations add Init -- "Server=localhost;Port=5432;Database=tickets;User Id=tickets;Password=password;"
+
+
+{
+  "shop": "caprabo",
+  "emitedAt": "2024-02-17T21:08:16.741Z",
+  "totalPaid": 12.34,
+  "items": [
+    {
+      "description": "desc",
+      "totalPrice": 3,
+      "quantity": 2
+    }
+  ]
+}
+
+
+caprabo_5250124027394797904

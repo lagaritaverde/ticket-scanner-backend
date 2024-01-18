@@ -1,0 +1,100 @@
+{
+  "Date": "2023-07-22T13:59:00.000Z",
+  "Shop": "Caprabo",
+  "Total": 53.05,
+  "Items": [
+    {
+      "Name": "MELO 18MEITAT",
+      "Quantity": 1,
+      "Price": 1.66
+    },
+    {
+      "Name": "SINDRIA EXTRA MEI",
+      "Quantity": 1,
+      "Price": 3.44
+    },
+    {
+      "Name": "PASTANAGA 1RG",
+      "Quantity": 1,
+      "Price": 1.09
+    },
+    {
+      "Name": "PIT POLLASTRE L'A",
+      "Quantity": 1,
+      "Price": 4.76
+    },
+    {
+      "Name": "HJUNGIY MAXIBON",
+      "Quantity": 1,
+      "Price": 5.99
+    },
+    {
+      "Name": "MAXIBON VVAFFLE",
+      "Quantity": 1,
+      "Price": 6.35
+    },
+    {
+      "Name": "NUGG.EST.POLLO VE",
+      "Quantity": 1,
+      "Price": 3.19
+    },
+    {
+      "Name": "PASTÍS TIRAMISÚ",
+      "Quantity": 1,
+      "Price": 7.45
+    },
+    {
+      "Name": "APERITIU FORMATGE",
+      "Quantity": 2,
+      "Price": 3.78
+    },
+    {
+      "Name": "BENTONITA PERFUMA",
+      "Quantity": 1,
+      "Price": 3.75
+    },
+    {
+      "Name": "MENTOS RAINBOY LC",
+      "Quantity": 1,
+      "Price": 1.05
+    },
+    {
+      "Name": "GOMINOLES COLA",
+      "Quantity": 1,
+      "Price": 1.35
+    },
+    {
+      "Name": "YATEROMO BARBACOA",
+      "Quantity": 1,
+      "Price": 0.89
+    },
+    {
+      "Name": "PA HAMBURGUESA",
+      "Quantity": 1,
+      "Price": 1
+    },
+    {
+      "Name": "TOSTAS TOMÀQUET",
+      "Quantity": 1,
+      "Price": 1
+    },
+    {
+      "Name": "LEVITÉ LLIMONA 1,",
+      "Quantity": 1,
+      "Price": 1.75
+    },
+    {
+      "Name": "REFRESC S/GAS POM",
+      "Quantity": 1,
+      "Price": 1
+    },
+    {
+      "Name": "SAB REC PALMOLIVE",
+      "Quantity": 1,
+      "Price": 3.55
+    }
+  ],
+  "PaymentInfo": {
+    "CardNumber": "9218"
+  }
+}

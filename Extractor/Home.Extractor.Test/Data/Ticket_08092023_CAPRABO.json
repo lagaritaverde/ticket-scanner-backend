@@ -1,0 +1,170 @@
+{
+  "Date": "2023-09-08T20:53:00.000Z",
+  "Shop": "Caprabo",
+  "Total": 87.93,
+  "Items": [
+    {
+      "Name": "PRUNA VERD",
+      "Quantity": 1,
+      "Price": 0.86
+    },
+    {
+      "Name": "POMA PINR LADY",
+      "Quantity": 1,
+      "Price": 2.29
+    },
+    {
+      "Name": "ALVOCAT HASS",
+      "Quantity": 1,
+      "Price": 2.3
+    },
+    {
+      "Name": "PASTANAGA 1RG",
+      "Quantity": 1,
+      "Price": 1.09
+    },
+    {
+      "Name": "COL CABDELL MEITA",
+      "Quantity": 1,
+      "Price": 0.93
+    },
+    {
+      "Name": "RELLOM POLLASTRE",
+      "Quantity": 1,
+      "Price": 3.59
+    },
+    {
+      "Name": "BOMBO GRAND.NEGRE",
+      "Quantity": 1,
+      "Price": 1.73
+    },
+    {
+      "Name": "QUESO EMMENTAL CU",
+      "Quantity": 1,
+      "Price": 3.03
+    },
+    {
+      "Name": "XORIÇO EXTRA PICA",
+      "Quantity": 1,
+      "Price": 2.99
+    },
+    {
+      "Name": "IOGURT LIQUID",
+      "Quantity": 1,
+      "Price": 1.45
+    },
+    {
+      "Name": "FORMATGE RATLLAT",
+      "Quantity": 1,
+      "Price": 1.54
+    },
+    {
+      "Name": "OU L CAMPEROL",
+      "Quantity": 1,
+      "Price": 4.03
+    },
+    {
+      "Name": "OLIVA GORDAL",
+      "Quantity": 1,
+      "Price": 3.35
+    },
+    {
+      "Name": "PATATA A L FORN",
+      "Quantity": 2,
+      "Price": 4.78
+    },
+    {
+      "Name": "APERITIU XETCHUP",
+      "Quantity": 1,
+      "Price": 1.89
+    },
+    {
+      "Name": "PATATAS PERNIL",
+      "Quantity": 1,
+      "Price": 1.65
+    },
+    {
+      "Name": "GOMIS MIX BRILLO",
+      "Quantity": 1,
+      "Price": 1.25
+    },
+    {
+      "Name": "TOMAQUET OLIVA",
+      "Quantity": 1,
+      "Price": 0.79
+    },
+    {
+      "Name": "FAVETE BABY OLIVA",
+      "Quantity": 1,
+      "Price": 3.95
+    },
+    {
+      "Name": "BENTONITA PERFUMA",
+      "Quantity": 2,
+      "Price": 7.5
+    },
+    {
+      "Name": "FIDEO XINES OU 25",
+      "Quantity": 1,
+      "Price": 1.75
+    },
+    {
+      "Name": "NACHOS ZANUY 200G",
+      "Quantity": 1,
+      "Price": 1.59
+    },
+    {
+      "Name": "SALSA CHEDDAR ZAN",
+      "Quantity": 1,
+      "Price": 2.1
+    },
+    {
+      "Name": "CIGRON EROSRI BAS",
+      "Quantity": 2,
+      "Price": 1.58
+    },
+    {
+      "Name": "TOSTAS TOMÀQUET",
+      "Quantity": 1,
+      "Price": 1
+    },
+    {
+      "Name": "CERVESA TEQUILA",
+      "Quantity": 6,
+      "Price": 9
+    },
+    {
+      "Name": "SIDRA POMA",
+      "Quantity": 6,
+      "Price": 6.9
+    },
+    {
+      "Name": "SIDRA FRUIT VEMEL",
+      "Quantity": 1,
+      "Price": 1.15
+    },
+    {
+      "Name": "REFRESC S/GAS POM",
+      "Quantity": 2,
+      "Price": 2
+    },
+    {
+      "Name": "ABRILLANTADOR",
+      "Quantity": 1,
+      "Price": 5.15
+    },
+    {
+      "Name": "PAPEL CUINA",
+      "Quantity": 1,
+      "Price": 3.23
+    },
+    {
+      "Name": "GNOCCHI 500G",
+      "Quantity": 1,
+      "Price": 1.49
+    }
+  ],
+  "PaymentInfo": {
+    "CardNumber": "9218"
+  }
+}
