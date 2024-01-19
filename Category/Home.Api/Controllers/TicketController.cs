@@ -73,7 +73,7 @@ namespace Home.Api.Controllers {
         [Route("", Name = "CreateTicket")]
         public async Task<string> CreateTicket(TicketCreateModel ticketModel) {
 
-            var ticket = new Ticket(ticketModel.Shop, ticketModel.EmitedAt, ticketModel.TotalPaid);
+            var ticket = new Ticket(ticketModel.Shop, ticketModel.EmitedAt.ToUniversalTime(), ticketModel.TotalPaid);
 
             ticket.SetItems(ticketModel.Items.Select(x => new Ticket.TicketItem(x.Description, x.TotalPrice, x.Quantity)));
 

@@ -1,6 +1,6 @@
 ﻿namespace Home.Extractor.Entities {
     public class Ticket {
-        public DateTime Date { get; set; }
+        public DateTime EmitedAt { get; set; }
         public string Shop { get; set; }
         public float Total { get; set; }
         public float TotalPaid { get; set; }
@@ -9,9 +9,9 @@
     }
 
     public class TicketItem {
-        public string Name { get; set; }
+        public string Description { get; set; }
         public int Quantity { get; set; }
-        public float Price { get; set; }
+        public float TotalPrice { get; set; }
     }
 
     public class PaymentInfo {

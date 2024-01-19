@@ -40,7 +40,7 @@ namespace Home.Extractor.Parsers {
                             //TODO force culture
                             var dateString = $"{match.Groups[3].Value}-{match.Groups[2].Value}-{match.Groups[1].Value} {match.Groups[4].Value}:{match.Groups[5].Value}:00";
                             var date = DateTime.Parse(dateString);
-                            ticket.Date = date;
+                            ticket.EmitedAt = date;
                             state = ParserState.ReadingItems;
                         }
                         break;
@@ -74,7 +74,7 @@ namespace Home.Extractor.Parsers {
                 }
             }
 
-            ticket.Total = ticket.Items.Sum(x => x.Price);
+            ticket.Total = ticket.Items.Sum(x => x.TotalPrice);
 
             return ticket;
         }
@@ -123,7 +123,7 @@ namespace Home.Extractor.Parsers {
 
             if (decimals.Length == 1) {
 
-                item.Price = float.Parse(decimals[0].Value.Replace(",", ".")); //PriceFromEnd(line, out int firstCharIndex);
+                item.TotalPrice = float.Parse(decimals[0].Value.Replace(",", ".")); //PriceFromEnd(line, out int firstCharIndex);
                 nameEndIndex = decimals[0].Index - 1;
             }
             else if (decimals.Length == 2) {
@@ -137,7 +137,7 @@ namespace Home.Extractor.Parsers {
                 if (int.TryParse(quantityString, out var result)) {
                     nameStartIndex = firstSpace + 1;
                     item.Quantity = result;
-                    item.Price = float.Parse(decimals[1].Value.Replace(",", "."));
+                    item.TotalPrice = float.Parse(decimals[1].Value.Replace(",", "."));
                     nameEndIndex = line.PreviousCharIndex(decimals[0].Index, ' ');
                 }
                 else {
@@ -148,7 +148,7 @@ namespace Home.Extractor.Parsers {
                     nameEndIndex = startPriceIndex - 1;
                     var priceString = line[startPriceIndex..betweend].Replace(",", ".");
 
-                    item.Price = float.Parse(priceString);
+                    item.TotalPrice = float.Parse(priceString);
                 }
 
             }
@@ -163,7 +163,7 @@ namespace Home.Extractor.Parsers {
             }
 
 
-            item.Name = line[nameStartIndex..nameEndIndex];
+            item.Description = line[nameStartIndex..nameEndIndex];
 
             return item;
         }
@@ -180,7 +180,7 @@ namespace Home.Extractor.Parsers {
             int nameEndIndex = 1;
 
             if (commaCount == 1) {
-                item.Price = PriceFromEnd(line, out int firstCharIndex);
+                item.TotalPrice = PriceFromEnd(line, out int firstCharIndex);
                 nameEndIndex = firstCharIndex;
             }
             else if (commaCount == 2) {
@@ -194,7 +194,7 @@ namespace Home.Extractor.Parsers {
                 if (int.TryParse(quantityString, out var result)) {
                     nameStartIndex = firstSpace + 1;
                     item.Quantity = result;
-                    item.Price = PriceFromEnd(line, out int firstCharIndex);
+                    item.TotalPrice = PriceFromEnd(line, out int firstCharIndex);
                     nameEndIndex = line.PreviousCharIndex(betweend, ' ');
                 }
                 else {
@@ -205,7 +205,7 @@ namespace Home.Extractor.Parsers {
                     nameEndIndex = startPriceIndex - 1;
                     var priceString = line[startPriceIndex..betweend].Replace(",", ".");
 
-                    item.Price = float.Parse(priceString);
+                    item.TotalPrice = float.Parse(priceString);
                 }
 
             }
@@ -220,7 +220,7 @@ namespace Home.Extractor.Parsers {
             }
 
 
-            item.Name = line[nameStartIndex..nameEndIndex];
+            item.Description = line[nameStartIndex..nameEndIndex];
 
             return item;
         }
