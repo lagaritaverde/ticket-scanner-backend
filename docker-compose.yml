@@ -1,0 +1,88 @@
+version: '3'
+
+services:
+  db:
+    container_name: tickets-db
+    image: postgres
+    ports:
+      - '5432:5432'
+    environment:
+      POSTGRES_USER: tickets
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: tickets
+    volumes:
+#      - ./SQL/:/docker-entrypoint-initdb.d/
+      - ./docker/postgres/data:/var/lib/postgresql/data
+
+    networks:
+      - backend
+
+  pgadmin:
+    container_name: tickets-db-webadmin
+    image: dpage/pgadmin4
+    depends_on:
+      - db
+    networks:
+      - backend
+    ports:
+      - '6666:80'
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@local.com
+      PGADMIN_DEFAULT_PASSWORD: password
+    volumes:
+      - ./docker/pgadmin/config/servers.json:/pgadmin4/servers.json
+      - ./docker/pgadmin/data:/var/lib/pgadmin
+
+  eventstore:
+    container_name: eventstore
+    image: eventstore/eventstore:latest
+    depends_on:
+      - db
+    networks:
+      - backend
+    ports:
+      - '2113:2113'
+      - '1113:1113'
+    environment:
+      EVENTSTORE_CLUSTER_SIZE: 1
+      EVENTSTORE_RUN_PROJECTIONS: All
+      EVENTSTORE_ENABLE_ATOM_PUB_OVER_HTTP: true
+    command:
+        --insecure
+    volumes:
+      - ./docker/eventstore/data:/var/lib/eventstore-data
+      - ./docker/eventstore/index:/var/lib/eventstore-index
+      - ./docker/eventstore/logs:/var/log/eventstore
+      
+  ticketextractor:
+    container_name: ticket-extractor
+    image: homeextractor
+    build: 
+        context: https://github.com/lagaritaverde/ticket-scanner-backend.git#main:Extractor
+        dockerfile: Home.Extractor/Dockerfile
+    ports:
+      - '8081:8080'
+    networks:
+      - backend
+
+  category:
+    container_name: category
+    image: homeapi
+    build: 
+        context: https://github.com/lagaritaverde/ticket-scanner-backend.git#main:Category
+        dockerfile: Home.Api/Dockerfile
+    depends_on:
+      - db
+      - eventstore
+    networks:
+      - backend
+    ports:
+      - '8080:8080'
+    environment:
+      ConnectionStrings__database: "Server=db;Port=5432;Database=tickets;User Id=tickets;Password=password;"
+      ConnectionStrings__eventstore: "esdb://eventstore:2113?tls=false&keepAliveTimeout=10000&keepAliveInterval=10000"
+
+networks:
+  backend:
+    driver: 'bridge'
+    enable_ipv6: false

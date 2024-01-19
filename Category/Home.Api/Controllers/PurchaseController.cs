@@ -45,6 +45,114 @@ namespace Home.Api.Controllers {
             return Ok(models);
         }
 
+        [HttpGet]
+        [Route("byGroup", Name = "ByGroup")]
+        [Produces<PurchaseModel[]>]
+        public async Task<IActionResult> ByGroup(string groupId) {
+
+            var purchases = repository.List();
+            var models = await purchases.Where(x => x.GroupId == groupId).Select(x =>
+                new PurchaseModel() {
+                    Category = x.Category,
+                    Date = x.Date,
+                    Description = x.Description,
+                    ShopItemName = x.ShopItemName,
+                    GroupId = x.GroupId,
+                    Id = x.Id,
+                    MustPayTo = x.MustPayTo,
+                    Owner = x.Owner,
+                    Price = x.Price,
+                    Quantity = x.Quantity,
+                    Shop = x.Shop,
+                    UnitPrice = x.UnitPrice,
+                    WhoPaid = x.WhoPaid,
+                }
+            ).ToArrayAsync();
+
+            return Ok(models);
+        }
+
+        [HttpGet]
+        [Route("{id}", Name = "GetPurchase")]
+        [Produces<PurchaseModel>]
+        public async Task<IActionResult> GetPurchase(string id) {
+
+            var purchase = await repository.Get(id);
+
+            if (purchase == null) {
+                return NotFound();
+            }
+
+            var model = new PurchaseModel() {
+                Category = purchase.Category,
+                Date = purchase.Date,
+                Description = purchase.Description,
+                ShopItemName = purchase.ShopItemName,
+                GroupId = purchase.GroupId,
+                Id = purchase.Id,
+                MustPayTo = purchase.MustPayTo,
+                Owner = purchase.Owner,
+                Price = purchase.Price,
+                Quantity = purchase.Quantity,
+                Shop = purchase.Shop,
+                UnitPrice = purchase.UnitPrice,
+                WhoPaid = purchase.WhoPaid,
+            };
+
+            return Ok(model);
+        }
+
+        [HttpPatch]
+        [Route("{id}/{category}", Name = "SetCategory")]
+        public async Task<IActionResult> SetCategory(string id, string category) {
+
+            var purchase = await repository.Get(id);
+
+            if (purchase == null) {
+                return NotFound();
+            }
+
+            purchase.SetCategory(category);
+
+            return Ok();
+        }
+
+        [HttpPatch]
+        [Route("{id}/{description}", Name = "SetDescription")]
+        public async Task<IActionResult> SetDescription(string id, string description) {
+
+            var purchase = await repository.Get(id);
+
+            if (purchase == null) {
+                return NotFound();
+            }
+
+            purchase.SetDescription(description);
+
+            return Ok();
+        }
+
+        [HttpPatch]
+        [Route("{id}/metadata", Name = "SetMetadata")]
+        public async Task<IActionResult> SetDescription(string id, PurchaseMetadata metadata) {
+
+            var purchase = await repository.Get(id);
+
+            if (purchase == null) {
+                return NotFound();
+            }
+
+            purchase.SetMetadata(metadata.Owner, metadata.MustPayTo, metadata.WhoPaid);
+
+            return Ok();
+        }
+
+        public class PurchaseMetadata {
+            public string? Owner { get; set; }
+            public string? MustPayTo { get; set; }
+            public string? WhoPaid { get; set; }
+        }
+
         public class PurchaseModel {
             public string Id { get; set; }
             public string Shop { get; set; }

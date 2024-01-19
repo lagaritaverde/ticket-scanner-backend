@@ -1,6 +1,7 @@
 ﻿using Home.OutBox.Service;
 using Home.Tickets.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using System.Text.Json;
@@ -20,9 +21,14 @@ namespace Home.Tickets.Infrastructure.Database.EntityMappings {
 
             builder.Ignore(x => x.Items);
 
-            builder.Property("ticketItems").HasConversion(new ValueConverter<List<TicketItem>, string>(
+            var comparer = new ValueComparer<ICollection<TicketItem>>(
+            (c1, c2) => c1.SequenceEqual(c2),
+            c => c.Aggregate(0, (a, v) => HashCode.Combine(a, v.GetHashCode())),
+            c => (ICollection<TicketItem>)c.ToList());
+
+            builder.Property("ticketItems").HasConversion(new ValueConverter<ICollection<TicketItem>, string>(
             v => Serialize(v),
-            v => Deserialize(v))).UsePropertyAccessMode(PropertyAccessMode.Field);
+            v => Deserialize(v)), comparer).UsePropertyAccessMode(PropertyAccessMode.Field);
 
 
             //builder.OwnsMany<TicketItem>("ticketItems", x => {
@@ -32,11 +38,11 @@ namespace Home.Tickets.Infrastructure.Database.EntityMappings {
             //});
         }
 
-        private List<TicketItem> Deserialize(string v) {
-            return JsonSerializer.Deserialize<List<TicketItem>>(v) ?? new List<TicketItem>();
+        private ICollection<TicketItem> Deserialize(string v) {
+            return JsonSerializer.Deserialize<ICollection<TicketItem>>(v) ?? new List<TicketItem>();
         }
 
-        private string Serialize(List<TicketItem> v) {
+        private string Serialize(ICollection<TicketItem> v) {
             return JsonSerializer.Serialize(v);
         }
     }

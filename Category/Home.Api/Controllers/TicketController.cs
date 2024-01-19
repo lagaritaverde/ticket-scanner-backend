@@ -3,6 +3,9 @@ using Home.Tickets.Domain.Entities;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Diagnostics;
 using Microsoft.AspNetCore.Mvc.Routing;
+using Microsoft.EntityFrameworkCore;
+using System.Xml;
+using static Home.Api.Controllers.TicketCreateModel;
 
 namespace Home.Api.Controllers {
     [ApiController]
@@ -48,9 +51,22 @@ namespace Home.Api.Controllers {
 
         [HttpGet]
         [Route("", Name = "GetTickets")]
-        public IEnumerable<TicketModel> GetTickets() {
-
-            return Array.Empty<TicketModel>();
+        public async Task<IEnumerable<TicketModel>> GetTickets() {
+            return (await repository.List().ToArrayAsync())
+                .Select(ticket => new TicketModel() {
+                    Id = ticket.Id,
+                    ClosedAt = ticket.ClosedAt,
+                    EmitedAt = ticket.EmitedAt,
+                    Shop = ticket.Shop,
+                    Total = ticket.Total,
+                    TotalPaid = ticket.TotalPaid,
+                    Items = ticket.Items.Select(x => new TicketModel.TicketItemModel() {
+                        Description = x.Description,
+                        Quantity = x.Quantity,
+                        TotalPrice = x.TotalPrice,
+                        UnitPrice = x.UnitPrice
+                    }).ToArray()
+                });
         }
 
         [HttpPost]
@@ -59,7 +75,7 @@ namespace Home.Api.Controllers {
 
             var ticket = new Ticket(ticketModel.Shop, ticketModel.EmitedAt, ticketModel.TotalPaid);
 
-            ticket.AddItemRange(ticketModel.Items.Select(x => new Ticket.TicketItem(x.Description, x.TotalPrice, x.Quantity)));
+            ticket.SetItems(ticketModel.Items.Select(x => new Ticket.TicketItem(x.Description, x.TotalPrice, x.Quantity)));
 
             await repository.Add(ticket);
 
@@ -80,6 +96,42 @@ namespace Home.Api.Controllers {
 
             return Ok();
         }
+
+        [HttpPut]
+        [Route("{id}/header", Name = "SetHeader")]
+        public async Task<IActionResult> SetHeader(string id, TicketHeaderModel ticketHeaderModel) {
+
+            var ticket = await repository.Get(id);
+
+            if (ticket == null) {
+                return NotFound();
+            }
+
+            ticket.SetHeader(ticketHeaderModel.Shop, ticketHeaderModel.EmitedAt, ticketHeaderModel.TotalPaid);
+
+            return Ok();
+        }
+
+        [HttpPut]
+        [Route("{id}/items", Name = "SetItems")]
+        public async Task<IActionResult> SetItems(string id, IEnumerable<TicketCreateItemModel> ticketCreateItemModels) {
+
+            var ticket = await repository.Get(id);
+
+            if (ticket == null) {
+                return NotFound();
+            }
+
+            ticket.SetItems(ticketCreateItemModels.Select(x => new Ticket.TicketItem(x.Description, x.TotalPrice, x.Quantity)));
+
+            return Ok();
+        }
+    }
+
+    public class TicketHeaderModel {
+        public string Shop { get; set; }
+        public DateTime EmitedAt { get; set; }
+        public decimal TotalPaid { get; set; }
     }
 
     public class TicketCreateModel {
