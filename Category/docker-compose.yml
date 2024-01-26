@@ -16,6 +16,14 @@ services:
 
     networks:
       - backend
+  auth:
+    container_name: auth
+    image: homeauth
+    ports:
+        - '5556:8080'
+    networks:
+      - backend
+      
   ticketextractor:
     container_name: ticket-extractor
     image: homeextractor

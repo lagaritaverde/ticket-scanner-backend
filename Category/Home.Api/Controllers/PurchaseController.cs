@@ -1,5 +1,6 @@
 using Home.Tickets.Domain;
 using Home.Tickets.Domain.Entities;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Routing;
 using Microsoft.EntityFrameworkCore;
@@ -9,6 +10,7 @@ namespace Home.Api.Controllers {
     [ApiController]
     [Route("[controller]")]
     //[Produces("application/json")]
+    [Authorize]
     public class PurchaseController : ControllerBase {
         private readonly IRepository<Purchase> repository;
         private readonly ILogger<PurchaseController> _logger;

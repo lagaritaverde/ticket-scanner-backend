@@ -1,5 +1,6 @@
 using Home.Tickets.Domain;
 using Home.Tickets.Domain.Entities;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Diagnostics;
 using Microsoft.AspNetCore.Mvc.Routing;
@@ -11,6 +12,7 @@ namespace Home.Api.Controllers {
     [ApiController]
     [Route("[controller]")]
     //[Produces("application/json")]
+    [Authorize]
     public class TicketController : ControllerBase {
         private readonly IRepository<Ticket> repository;
         private readonly ILogger<TicketController> _logger;
