@@ -3,6 +3,7 @@ using Home.Tickets.Domain.Entities;
 using Home.Tickets.Domain.Events;
 using Home.Tickets.Infrastructure.Database;
 using MediatR;
+using System.Linq;
 
 namespace Home.Api.EventHandlers {
 
@@ -30,6 +31,7 @@ namespace Home.Api.EventHandlers {
 
             var purchases = notification.Event.Items.Select(x => new Purchase(Guid.NewGuid().ToString(),
                 notification.Event.Shop,
+                notification.Event.AccountingGroup,
                 notification.Event.EmitedAt.UtcDateTime,
                 x.TotalPrice,
                 x.Quantity,

@@ -10,6 +10,7 @@ namespace Home.Tickets.Infrastructure.Database.EntityMappings {
             builder.HasKey(x => x.Id);
             builder.Property(x => x.Id).IsRequired().HasMaxLength(50);
             builder.Property(x => x.Shop).IsRequired().HasMaxLength(50);
+            builder.Property(x => x.AccountingGroup).IsRequired().HasMaxLength(50);
             builder.Property(x => x.Date).IsRequired();
             builder.Property(x => x.GroupId).IsRequired();
             builder.Property(x => x.Quantity).IsRequired();

@@ -1,11 +1,8 @@
 using Home.Tickets.Domain;
 using Home.Tickets.Domain.Entities;
+using Home.Tickets.Domain.Specifications;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Diagnostics;
-using Microsoft.AspNetCore.Mvc.Routing;
-using Microsoft.EntityFrameworkCore;
-using System.Xml;
 using static Home.Api.Controllers.TicketCreateModel;
 
 namespace Home.Api.Controllers {
@@ -15,10 +12,12 @@ namespace Home.Api.Controllers {
     [Authorize]
     public class TicketController : ControllerBase {
         private readonly IRepository<Ticket> repository;
+        private readonly TicketUser ticketUser;
         private readonly ILogger<TicketController> _logger;
 
-        public TicketController(IRepository<Ticket> repository, ILogger<TicketController> logger) {
+        public TicketController(IRepository<Ticket> repository, TicketUser ticketUser, ILogger<TicketController> logger) {
             this.repository = repository;
+            this.ticketUser = ticketUser;
             _logger = logger;
         }
 
@@ -27,7 +26,8 @@ namespace Home.Api.Controllers {
         [Produces<TicketModel>]
         public async Task<IActionResult> GetTicket(string id) {
 
-            var ticket = await repository.Get(id);
+            var specification = new AllowedTicketSpecification(id, ticketUser.AllowedAccountingGroup.First());
+            var ticket = await repository.Get(specification);
 
             if (ticket == null) {
                 return NotFound();
@@ -54,7 +54,11 @@ namespace Home.Api.Controllers {
         [HttpGet]
         [Route("", Name = "GetTickets")]
         public async Task<IEnumerable<TicketModel>> GetTickets() {
-            return (await repository.List().ToArrayAsync())
+            var specification = new AllowedTicketsSpecification(ticketUser.AllowedAccountingGroup.First());
+
+            var tickets = await repository.List(specification);
+
+            return tickets
                 .Select(ticket => new TicketModel() {
                     Id = ticket.Id,
                     ClosedAt = ticket.ClosedAt,
@@ -75,7 +79,7 @@ namespace Home.Api.Controllers {
         [Route("", Name = "CreateTicket")]
         public async Task<string> CreateTicket(TicketCreateModel ticketModel) {
 
-            var ticket = new Ticket(ticketModel.Shop, ticketModel.EmitedAt.ToUniversalTime(), ticketModel.TotalPaid);
+            var ticket = new Ticket(ticketModel.Shop, ticketModel.EmitedAt.ToUniversalTime(), ticketUser.AllowedAccountingGroup.First(), ticketModel.TotalPaid);
 
             ticket.SetItems(ticketModel.Items.Select(x => new Ticket.TicketItem(x.Description, x.TotalPrice, x.Quantity)));
 
@@ -88,7 +92,8 @@ namespace Home.Api.Controllers {
         [Route("{id}/close", Name = "CloseTicket")]
         public async Task<IActionResult> CloseTicket(string id) {
 
-            var ticket = await repository.Get(id);
+            var specification = new AllowedTicketSpecification(id, ticketUser.AllowedAccountingGroup.First());
+            var ticket = await repository.Get(specification);
 
             if (ticket == null) {
                 return NotFound();
@@ -103,7 +108,8 @@ namespace Home.Api.Controllers {
         [Route("{id}/header", Name = "SetHeader")]
         public async Task<IActionResult> SetHeader(string id, TicketHeaderModel ticketHeaderModel) {
 
-            var ticket = await repository.Get(id);
+            var specification = new AllowedTicketSpecification(id, ticketUser.AllowedAccountingGroup.First());
+            var ticket = await repository.Get(specification);
 
             if (ticket == null) {
                 return NotFound();
@@ -118,7 +124,8 @@ namespace Home.Api.Controllers {
         [Route("{id}/items", Name = "SetItems")]
         public async Task<IActionResult> SetItems(string id, IEnumerable<TicketCreateItemModel> ticketCreateItemModels) {
 
-            var ticket = await repository.Get(id);
+            var specification = new AllowedTicketSpecification(id, ticketUser.AllowedAccountingGroup.First());
+            var ticket = await repository.Get(specification);
 
             if (ticket == null) {
                 return NotFound();

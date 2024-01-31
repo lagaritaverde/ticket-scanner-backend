@@ -63,6 +63,8 @@ optionsBuilder.UseNpgsql(databaseConnectionString, x => {
     x.MigrationsHistoryTable("__EFMigration", TicketContext.schema);
 });
 
+//optionsBuilder.LogTo(x => Console.WriteLine(x));
+
 builder.Services.AddSingleton(optionsBuilder.Options);
 
 builder.Services.AddScoped<TicketContext>();
@@ -79,6 +81,9 @@ builder.Services.AddScoped<MediatorOutbox>();
 
 builder.Services.AddScoped<IOutBoxPendingStorage, EFOutBoxPendingStorage>();
 builder.Services.AddScoped<IOutBoxSender, EventStoreOutBoxSenerSender>();
+
+builder.Services.AddScoped<UserContext>();
+builder.Services.AddScoped(x => x.GetRequiredService<UserContext>().User);
 
 builder.Services.AddHostedService<OutboxSenderWorker>();
 builder.Services.AddHostedService<OutboxReciverWorker>();

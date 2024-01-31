@@ -8,6 +8,7 @@ namespace Home.Tickets.Domain.Events {
     public class PurchaseAdded : EventBase {
         public string Id { get; set; }
         public string Shop { get; set; }
+        public string AccountingGroup { get; set; }
         public DateTime Date { get; set; }
         public decimal Price { get; set; }
         public decimal UnitPrice { get; set; }

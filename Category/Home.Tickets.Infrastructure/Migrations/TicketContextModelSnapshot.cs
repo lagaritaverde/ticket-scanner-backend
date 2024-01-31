@@ -57,6 +57,11 @@ namespace Home.Tickets.Infrastructure.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("character varying(50)");
 
+                    b.Property<string>("AccountingGroup")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("character varying(50)");
+
                     b.Property<string>("Category")
                         .HasMaxLength(50)
                         .HasColumnType("character varying(50)");
@@ -111,6 +116,11 @@ namespace Home.Tickets.Infrastructure.Migrations
             modelBuilder.Entity("Home.Tickets.Domain.Entities.Ticket", b =>
                 {
                     b.Property<string>("Id")
+                        .HasMaxLength(50)
+                        .HasColumnType("character varying(50)");
+
+                    b.Property<string>("AccountingGroup")
+                        .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("character varying(50)");
 

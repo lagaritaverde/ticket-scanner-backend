@@ -4,6 +4,7 @@ namespace Home.Tickets.Domain.Entities {
     public class Purchase : EntityBase {
         public string Id { get; }
         public string Shop { get; }
+        public string AccountingGroup { get; }
         public DateTime Date { get; }
         public decimal Price { get; }
         public decimal UnitPrice { get; }
@@ -21,9 +22,10 @@ namespace Home.Tickets.Domain.Entities {
         private Purchase() {
         }
 
-        public Purchase(string id, string shop, DateTime date, decimal price, int quantity, string groupId, string shopItemName, string description, string category) {
+        public Purchase(string id, string shop, string accountingGroup, DateTime date, decimal price, int quantity, string groupId, string shopItemName, string description, string category) {
             Id = id;
             Shop = shop;
+            AccountingGroup = accountingGroup;
             Date = date;
             Price = price;
             Quantity = quantity;
@@ -34,6 +36,7 @@ namespace Home.Tickets.Domain.Entities {
             ShopItemName = shopItemName;
 
             this.AddEvent(new PurchaseAdded() {
+                AccountingGroup = accountingGroup,
                 Date = date,
                 Price = price,
                 Description = description,

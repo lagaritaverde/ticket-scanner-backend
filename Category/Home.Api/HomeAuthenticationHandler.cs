@@ -5,6 +5,13 @@ using System.Text.Encodings.Web;
 
 namespace Home.Api {
 
+
+    //public static class UserExtensions {
+    //    public static TicketUser AsTicketUser(this ClaimsPrincipal claimsPrincipal) {
+
+    //    }
+    //}
+
     public class AuthenticationOptions : AuthenticationSchemeOptions {
 
     }
@@ -38,8 +45,15 @@ namespace Home.Api {
                 new Claim(ClaimTypes.NameIdentifier, session.UserId) ,
                 new Claim(ClaimTypes.Name, session.UserName)
             };
+
             var principal = new ClaimsPrincipal(new ClaimsIdentity(claims, "Tokens"));
+
             var ticket = new AuthenticationTicket(principal, this.Scheme.Name);
+
+            var userContext = this.Context.RequestServices.GetRequiredService<UserContext>();
+
+            userContext.User = TicketUser.FromUserSession(session);
+
             return AuthenticateResult.Success(ticket);
 
         }

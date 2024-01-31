@@ -22,6 +22,10 @@ namespace Home.Auth.Controllers {
         [Route("AccountingGroup", Name = "SetAccountingGroup")]
         public async Task<IActionResult> SetAccountingGroup(AccountingGroup accountingGroup) {
 
+            if (accountingGroup.AccoutingGroupId.Contains(":")) {
+                return BadRequest("Group can't contina :");
+            }
+
             var userId = User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier)?.Value;
 
             var user = await userDbContext.Users

@@ -39,6 +39,7 @@ namespace Home.Tickets.Infrastructure.Migrations
                 {
                     Id = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: false),
                     Shop = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: false),
+                    AccountingGroup = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: false),
                     Date = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     Price = table.Column<decimal>(type: "numeric", nullable: false),
                     UnitPrice = table.Column<decimal>(type: "numeric", nullable: false),
@@ -62,6 +63,7 @@ namespace Home.Tickets.Infrastructure.Migrations
                 columns: table => new
                 {
                     Id = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: false),
+                    AccountingGroup = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: false),
                     Shop = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: false),
                     EmitedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     ClosedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),

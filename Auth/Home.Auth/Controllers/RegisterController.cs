@@ -34,7 +34,9 @@ namespace Home.Auth.Controllers {
                 UserName = registerRequest.UserName,
                 Email = registerRequest.Email,
                 Password = registerRequest.Password,
-                AllowedAccountingGroup = new List<string>()
+                AllowedAccountingGroup = new List<string>() {
+                    $"User:{registerRequest.UserName}"
+                }
             });
 
             await userDbContext.SaveChangesAsync();

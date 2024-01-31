@@ -12,7 +12,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Home.Tickets.Infrastructure.Migrations
 {
     [DbContext(typeof(TicketContext))]
-    [Migration("20240118005253_Init")]
+    [Migration("20240131221409_Init")]
     partial class Init
     {
         /// <inheritdoc />
@@ -57,6 +57,11 @@ namespace Home.Tickets.Infrastructure.Migrations
             modelBuilder.Entity("Home.Tickets.Domain.Entities.Purchase", b =>
                 {
                     b.Property<string>("Id")
+                        .HasMaxLength(50)
+                        .HasColumnType("character varying(50)");
+
+                    b.Property<string>("AccountingGroup")
+                        .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("character varying(50)");
 
@@ -114,6 +119,11 @@ namespace Home.Tickets.Infrastructure.Migrations
             modelBuilder.Entity("Home.Tickets.Domain.Entities.Ticket", b =>
                 {
                     b.Property<string>("Id")
+                        .HasMaxLength(50)
+                        .HasColumnType("character varying(50)");
+
+                    b.Property<string>("AccountingGroup")
+                        .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("character varying(50)");
 

@@ -9,6 +9,7 @@ using static Home.Tickets.Domain.Events.TicketClosed;
 namespace Home.Tickets.Domain.Entities {
     public class Ticket : EntityBase {
         public string Id { get; private set; }
+        public string AccountingGroup { get; private set; }
         public string Shop { get; private set; }
         public DateTime EmitedAt { get; private set; }
         public DateTime? ClosedAt { get; private set; }
@@ -23,12 +24,13 @@ namespace Home.Tickets.Domain.Entities {
         private Ticket() {
         }
 
-        public Ticket(string shop, DateTime emitedAt, decimal totalPaid) {
+        public Ticket(string shop, DateTime emitedAt, string accountingGroup, decimal totalPaid) {
             Shop = shop;
             EmitedAt = emitedAt;
             TotalPaid = totalPaid;
             ticketItems = new List<TicketItem>();
             IsOpen = true;
+            AccountingGroup = accountingGroup;
             Id = $"{shop}_{emitedAt.ToBinary()}";
         }
 
@@ -71,6 +73,7 @@ namespace Home.Tickets.Domain.Entities {
             var ticketClosed = new TicketClosed() {
                 Id = Id,
                 Shop = Shop,
+                AccountingGroup = AccountingGroup,
                 EmitedAt = EmitedAt,
                 TotalPaid = TotalPaid,
                 Total = Total,

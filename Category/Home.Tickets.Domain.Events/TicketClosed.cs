@@ -9,6 +9,7 @@ namespace Home.Tickets.Domain.Events {
 
         public string Id { get; set; }
         public string Shop { get; set; }
+        public string AccountingGroup { get; set; }
         public DateTimeOffset EmitedAt { get; set; }
         public DateTimeOffset ClosedAt { get; set; }
         public decimal TotalPaid { get; set; }

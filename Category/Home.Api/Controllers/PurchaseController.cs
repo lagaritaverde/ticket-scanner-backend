@@ -1,10 +1,8 @@
 using Home.Tickets.Domain;
 using Home.Tickets.Domain.Entities;
+using Home.Tickets.Domain.Specifications;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Routing;
-using Microsoft.EntityFrameworkCore;
-using System.Linq;
 
 namespace Home.Api.Controllers {
     [ApiController]
@@ -13,10 +11,12 @@ namespace Home.Api.Controllers {
     [Authorize]
     public class PurchaseController : ControllerBase {
         private readonly IRepository<Purchase> repository;
+        private readonly TicketUser ticketUser;
         private readonly ILogger<PurchaseController> _logger;
 
-        public PurchaseController(IRepository<Purchase> repository, ILogger<PurchaseController> logger) {
+        public PurchaseController(IRepository<Purchase> repository, TicketUser ticketUser, ILogger<PurchaseController> logger) {
             this.repository = repository;
+            this.ticketUser = ticketUser;
             _logger = logger;
         }
 
@@ -24,9 +24,11 @@ namespace Home.Api.Controllers {
         [Route("", Name = "GetPurchases")]
         [Produces<PurchaseModel[]>]
         public async Task<IActionResult> List() {
+            var specification = new AllowedPurchasesSpecification(ticketUser.AllowedAccountingGroup.First());
 
-            var purchases = repository.List();
-            var models = await purchases.Select(x =>
+            var purchases = await repository.List(specification);
+
+            var models = purchases.Select(x =>
                 new PurchaseModel() {
                     Category = x.Category,
                     Date = x.Date,
@@ -42,7 +44,7 @@ namespace Home.Api.Controllers {
                     UnitPrice = x.UnitPrice,
                     WhoPaid = x.WhoPaid,
                 }
-            ).ToArrayAsync();
+            ).ToArray();
 
             return Ok(models);
         }
@@ -52,8 +54,11 @@ namespace Home.Api.Controllers {
         [Produces<PurchaseModel[]>]
         public async Task<IActionResult> ByGroup(string groupId) {
 
-            var purchases = repository.List();
-            var models = await purchases.Where(x => x.GroupId == groupId).Select(x =>
+            var specification = new AllowedPurchasesByGroupSpecification(groupId, ticketUser.AllowedAccountingGroup.First());
+
+            var purchases = await repository.List(specification);
+
+            var models = purchases.Select(x =>
                 new PurchaseModel() {
                     Category = x.Category,
                     Date = x.Date,
@@ -69,7 +74,7 @@ namespace Home.Api.Controllers {
                     UnitPrice = x.UnitPrice,
                     WhoPaid = x.WhoPaid,
                 }
-            ).ToArrayAsync();
+            ).ToArray();
 
             return Ok(models);
         }
@@ -79,7 +84,9 @@ namespace Home.Api.Controllers {
         [Produces<PurchaseModel>]
         public async Task<IActionResult> GetPurchase(string id) {
 
-            var purchase = await repository.Get(id);
+            var specification = new AllowedPurchaseSpecification(id, ticketUser.AllowedAccountingGroup.First());
+
+            var purchase = await repository.Get(specification);
 
             if (purchase == null) {
                 return NotFound();
@@ -108,7 +115,9 @@ namespace Home.Api.Controllers {
         [Route("{id}/{category}", Name = "SetCategory")]
         public async Task<IActionResult> SetCategory(string id, string category) {
 
-            var purchase = await repository.Get(id);
+            var specification = new AllowedPurchaseSpecification(id, ticketUser.AllowedAccountingGroup.First());
+
+            var purchase = await repository.Get(specification);
 
             if (purchase == null) {
                 return NotFound();
@@ -123,7 +132,9 @@ namespace Home.Api.Controllers {
         [Route("{id}/{description}", Name = "SetDescription")]
         public async Task<IActionResult> SetDescription(string id, string description) {
 
-            var purchase = await repository.Get(id);
+            var specification = new AllowedPurchaseSpecification(id, ticketUser.AllowedAccountingGroup.First());
+
+            var purchase = await repository.Get(specification);
 
             if (purchase == null) {
                 return NotFound();
@@ -138,7 +149,9 @@ namespace Home.Api.Controllers {
         [Route("{id}/metadata", Name = "SetMetadata")]
         public async Task<IActionResult> SetDescription(string id, PurchaseMetadata metadata) {
 
-            var purchase = await repository.Get(id);
+            var specification = new AllowedPurchaseSpecification(id, ticketUser.AllowedAccountingGroup.First());
+
+            var purchase = await repository.Get(specification);
 
             if (purchase == null) {
                 return NotFound();
