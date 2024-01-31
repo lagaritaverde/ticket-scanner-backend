@@ -2,17 +2,44 @@ using Home.Auth;
 using Home.Auth.Database;
 using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
 var datasource = builder.Configuration.GetConnectionString("database2") ?? "Data Source=users.db";
 
+builder.Services.AddAuthentication("Home")
+    .AddScheme<AuthenticationOptions, HomeAuthenticationHandler>(
+        "Home",
+        opts => { }
+    );
 // Add services to the container.
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGen(x => {
+    var bearerScheme = new OpenApiSecurityScheme {
+        BearerFormat = "Bearer",
+        Name = "TOKEN Authentication",
+        In = ParameterLocation.Header,
+        Type = SecuritySchemeType.Http,
+        Scheme = "Bearer",
+        Description = "Put **_ONLY_** your Bearer token on textbox below!",
+
+        Reference = new OpenApiReference {
+            Id = "Bearer",
+            Type = ReferenceType.SecurityScheme
+        }
+    };
+
+    x.AddSecurityDefinition(bearerScheme.Reference.Id, bearerScheme);
+
+    x.AddSecurityRequirement(new OpenApiSecurityRequirement
+    {
+        { bearerScheme, Array.Empty<string>() }
+    });
+});
 
 builder.Services.AddSingleton<SessionStore>();
 
@@ -29,6 +56,8 @@ await dbContext.Database.MigrateAsync();
 app.UseSwagger();
 app.UseSwaggerUI();
 
+app.UseAuthentication();
+app.UseAuthorization();
 //}
 
 app.UseForwardedHeaders(new ForwardedHeadersOptions {
